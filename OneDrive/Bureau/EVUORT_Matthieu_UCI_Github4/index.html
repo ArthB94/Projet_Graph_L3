@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+<style>
+    .userrow {padding:2em;background-color: beige; font-size: large; font-weight: bold;width: 50%;margin:auto;}
+</style>
+</head>
+  <body>
+    <div class="container">
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+          <h1 class="display-5 fw-bold">Custom jumbotron</h1>
+          <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+          <button class="btn btn-primary btn-lg" type="button" id="show">Show me the Animes</button>
+          <button class="btn btn-primary btn-lg" type="button" id="hide">Hide Animes</button>
+          <form>
+            <label for="id">ID : </label><br>
+            <input type="text" id="id_main"><br>
+            <label for="Name">Name : </label><br>
+            <input type="text" id="name_main"><br>
+            <label for="Studio">Studio : </label><br>
+            <input type="text" id="studio_main">
+            <input id="insert" type="submit" value="Insert" />
+            <input id="update" type="submit" value="Update" />
+            <input id="delete" type="submit" value="Delete" />
+          </form>
+        </div>
+      </div>
+     <div id="show-animes">
+
+     </div> 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script>
+$('#show').click(function(){
+    $("#show-animes").fadeIn();
+    document.getElementById('show-animes').innerHTML = '';
+    console.log(document.getElementById('.main_input'));
+
+  
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:3000/animes", 
+    success: function(result){
+    var anime = '';
+    console.log(result)
+
+    var mainContainer = document.getElementById("show-animes");
+    for (var i=0; i<result.length; i++){
+        var div = document.createElement('div');
+        div.classList.add('animes');
+        div.innerHTML = 'Name : ' + result[i].name + ' - Studio : ' + result[i].studio;
+        mainContainer.appendChild(div);
+    }
+}
+  });
+});
+$("#hide").click(function(){
+    $("#show-animes").fadeOut();
+})
+
+document.querySelector("#insert").addEventListener('click', async (event) => {
+  event.preventDefault()
+  const requestOptions = {
+    method: "POST", 
+    body: JSON.stringify({
+      name: document.querySelector("#name_main").value,
+      studio: document.querySelector("#studio_main").value, 
+    }), 
+    headers: { "Content-Type": "application/json" }
+  }
+  const newanime = await (await fetch("http://localhost:3000/create", requestOptions)).json()
+  console.log(newanime);
+});
+
+document.querySelector("#update").addEventListener('click', event => {
+  event.preventDefault()
+  const requestOptions = {
+    method: "PUT", 
+    body: JSON.stringify({
+      name: document.querySelector("#name_main").value,
+      studio: document.querySelector("#studio_main").value, 
+    }), 
+    headers: { "Content-Type": "application/json" }
+  }
+  fetch("http://localhost:3000/update/" + document.querySelector("#id_main").value, requestOptions)
+})
+
+document.querySelector("#delete").addEventListener("click", event => {
+  event.preventDefault()
+  fetch("http://localhost:3000/delete/" + document.querySelector("#id_main").value, { method: "DELETE" })
+})
+
+</script>  
+</body>
+</html>
