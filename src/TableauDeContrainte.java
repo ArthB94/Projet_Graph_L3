@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableauDeContrainte {
+    // j'ai fait une liste de tache pour faire des parcour plus facilement mais ce
+    // n'est peut etre pas utile, le plus important étant la matrice pour l'instant
+    // pour la fonction de detection de circuit
     ArrayList<Tache> taches;
     String[][] matrice;
     private int nbSommets;
@@ -64,42 +67,49 @@ public class TableauDeContrainte {
     }
 
     public void DetectionCircuit() {
-        matrice = this.matrice;
         System.out.println("Il y a un seul point d entrée, a\nIl y a un seul point de sortie, w");
         System.out.println("Detection de circuit");
         System.out.println("Methode de suppression des points d'entrée");
-        System.out.println(MatriceToString(matrice));
+        System.out.println(this.MatriceToString());
+        // initialisation de la liste des sommets à étudier
         ArrayList<Integer> sommets = new ArrayList<Integer>();
         for (int i = 0; i < matrice.length; i++) {
             sommets.add(i);
         }
-        int sizepre = 0;
-        while (sommets.size() != sizepre) {
-            sizepre = sommets.size();
-
+        // initialisation de la variable permettant de savoir si on est dans une boucle
+        int sizePres = 0;
+        while (sommets.size() != sizePres) {
+            sizePres = sommets.size();
+            // boucle permettant de savoir si un sommet est un point d'entrée
             for (int j = 0; j < sommets.size(); j++) {
-                boolean point = true;
+                boolean pointEntré = true;
                 for (int i = 0; i < sommets.size(); i++) {
+                    // si une case de la colone n'est pas vide on est pas sur un point d'entrée
                     if (i != 0 && matrice[sommets.get(i)][sommets.get(j)] != ".") {
-                        point = false;
+                        pointEntré = false;
 
                     }
                 }
-                if (point && j != 0) {
+                if (pointEntré && j != 0) {
+                    // si on est sur un point d'entrée on supprime se sommet de la liste des sommets
+                    // à considérer
                     System.out.println("Points d'entrée: " + matrice[sommets.get(j)][0]);
                     System.out.println("Suppression de " + matrice[sommets.get(j)][0]);
                     sommets.remove(sommets.get(j));
+                    // si le la liste des sommets ne posséde plus qu'un element alors il n'y a pas
+                    // de circuit
                     if (sommets.size() == 1) {
                         System.out.println("Il n'y a pas de circuit");
                         return;
                     }
+                    // sinon on affiche la liste des sommets restants
                     String sommet = "";
                     for (int i = 1; i < sommets.size(); i++) {
                         sommet += matrice[sommets.get(i)][0] + " ";
                     }
                     System.out.println("Sommets: " + sommet);
 
-                    // afficher la matrice
+                    // on afficher l'état de la matrice, c'est peut étre provisoir
                     System.out.println("matrice\n");
                     String m = "";
                     for (int y = 0; y < sommets.size(); y++) {
@@ -117,6 +127,7 @@ public class TableauDeContrainte {
 
             }
         }
+        // si il n'y a pas eu de suppression de sommet alors il y a un circuit
         System.out.println("Il y a un circuit");
 
     }
@@ -140,7 +151,8 @@ public class TableauDeContrainte {
         return nbArcs;
     }
 
-    public String MatriceToString(String[][] matrice) {
+    // retourne un affichage propre de la matrice
+    public String MatriceToString() {
         String str = "";
         str += "Matrice:\n";
         for (int i = 0; i < matrice.length; i++) {
@@ -160,7 +172,7 @@ public class TableauDeContrainte {
         for (Tache tache : taches) {
             str += tache.toString() + "\n";
         }
-        str += MatriceToString(this.matrice);
+        str += this.MatriceToString();
         return str;
 
     }
