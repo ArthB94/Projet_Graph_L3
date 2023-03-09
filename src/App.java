@@ -46,11 +46,18 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        String filepath = "C:/Users/arthu/OneDrive/Documents/VsCode/Projet_Graph_L3/src/tableaux.txt";
+        int numFile = 2;
+        String filepath = "C:/Users/arthu/OneDrive/Documents/VsCode/Projet_Graph_L3/src/Tables/Table" + numFile
+                + ".txt";
+        ;
         int[][] tab = readTxtFile(filepath);
         printTabInt(tab);
         TableauDeContrainte tabC = new TableauDeContrainte(filepath);
-        tabC.DetectionCircuit();
+        if (tabC.DetectionCircuit() || tabC.DetectionNegativité()) {
+            System.out.println("Ce n'est pas un graph d'ordonnancement");
+        } else {
+            System.out.println("Ce graph d'ordonnancement est valide");
+        }
 
     }
 }

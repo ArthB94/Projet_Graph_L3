@@ -66,7 +66,18 @@ public class TableauDeContrainte {
 
     }
 
-    public void DetectionCircuit() {
+    public boolean DetectionNegativité() {
+        for (Tache t : taches) {
+            if (t.duree < 0) {
+                System.out.println("La tache " + t.nom + " a une duree negative");
+                return true;
+            }
+        }
+        System.out.println("Il n'y a pas de duree negative");
+        return false;
+    }
+
+    public boolean DetectionCircuit() {
         System.out.println("Il y a un seul point d entrée, a\nIl y a un seul point de sortie, w");
         System.out.println("Detection de circuit");
         System.out.println("Methode de suppression des points d'entrée");
@@ -100,7 +111,7 @@ public class TableauDeContrainte {
                     // de circuit
                     if (sommets.size() == 1) {
                         System.out.println("Il n'y a pas de circuit");
-                        return;
+                        return false;
                     }
                     // sinon on affiche la liste des sommets restants
                     String sommet = "";
@@ -129,6 +140,7 @@ public class TableauDeContrainte {
         }
         // si il n'y a pas eu de suppression de sommet alors il y a un circuit
         System.out.println("Il y a un circuit");
+        return true;
 
     }
 
