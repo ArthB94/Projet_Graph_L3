@@ -121,16 +121,18 @@ public class TableauDeContrainte {
                     System.out.println("Sommets: " + sommet);
 
                     // on afficher l'état de la matrice, c'est peut étre provisoir
-                    System.out.println("matrice\n");
-                    String m = "";
-                    for (int y = 0; y < sommets.size(); y++) {
-                        for (int z = 0; z < sommets.size(); z++) {
-                            m += matrice[sommets.get(y)][sommets.get(z)] + "\t";
-                            ;
-                        }
-                        m += "\n";
-                    }
-                    System.out.println(m);
+                    /*
+                     * System.out.println("matrice\n");
+                     * String m = "";
+                     * for (int y = 0; y < sommets.size(); y++) {
+                     * for (int z = 0; z < sommets.size(); z++) {
+                     * m += matrice[sommets.get(y)][sommets.get(z)] + "\t";
+                     * ;
+                     * }
+                     * m += "\n";
+                     * }
+                     * System.out.println(m);
+                     */
                     ///////////////////////////
 
                     j--;
@@ -141,6 +143,23 @@ public class TableauDeContrainte {
         // si il n'y a pas eu de suppression de sommet alors il y a un circuit
         System.out.println("Il y a un circuit");
         return true;
+
+    }
+
+    // set les rangs des taches qui par défaut sont à -1 à vérifier si ça fonctionne
+    // bien
+    public void SetRangs() {
+        taches.get(0).setRang(0);
+        boolean good = false;
+        while (good == false) {
+            good = true;
+            for (Tache t : taches) {
+                if (!t.setRang()) {
+                    good = false;
+                }
+                ;
+            }
+        }
 
     }
 

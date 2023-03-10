@@ -46,17 +46,27 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        int numFile = 2;
-        String filepath = "C:/Users/arthu/OneDrive/Documents/VsCode/Projet_Graph_L3/src/Tables/Table" + numFile
-                + ".txt";
-        ;
-        int[][] tab = readTxtFile(filepath);
-        printTabInt(tab);
-        TableauDeContrainte tabC = new TableauDeContrainte(filepath);
-        if (tabC.DetectionCircuit() || tabC.DetectionNegativité()) {
-            System.out.println("Ce n'est pas un graph d'ordonnancement");
-        } else {
-            System.out.println("Ce graph d'ordonnancement est valide");
+        for (int i = 1; i < 12; i++) {
+            int numFile = i;
+            String filepath = "C:/Users/arthu/OneDrive/Documents/VsCode/Projet_Graph_L3/src/Tables/Table" + numFile
+                    + ".txt";
+            ;
+            System.out.println(
+                    "***************************************************************************************************************************************\nDébut\n");
+            int[][] tab = readTxtFile(filepath);
+
+            printTabInt(tab);
+            TableauDeContrainte tabC = new TableauDeContrainte(filepath);
+
+            if (tabC.DetectionCircuit() || tabC.DetectionNegativité()) {
+                System.out.println("Ce n'est pas un graph d'ordonnancement");
+            } else {
+                System.out.println("Ce graph d'ordonnancement est valide");
+            }
+
+            // System.out.println(tabC.toString());
+            tabC.SetRangs();
+            System.out.println(tabC.toString());
         }
 
     }

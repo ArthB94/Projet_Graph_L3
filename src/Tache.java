@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Tache {
     String nom;
     int duree;
+    int rang = -1;
     ArrayList<Tache> contraintes;
 
     public Tache(String nom, int duree, ArrayList<Tache> contraintes) {
@@ -35,6 +36,36 @@ public class Tache {
         this.contraintes = contraintes;
     }
 
+    public int getRang() {
+        return rang;
+    }
+
+    // permet de modifier le rang de la tache en parametre
+    public void setRang(int rang) {
+        this.rang = rang;
+    }
+
+    // permet d'utiliser SetRangs de la class TableauDeContrainte
+    public boolean setRang() {
+        if (rang != 0) {
+            if (contraintes.get(0).getRang() == -1) {
+                setRang(-1);
+                ;
+                return false;
+            } else {
+                setRang(contraintes.get(0).getRang() + 1);
+
+                for (Tache tache : contraintes) {
+                    if (tache.getRang() > rang) {
+                        rang = tache.getRang() + 1;
+                    }
+                }
+
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         String ContraintesNames = "[";
@@ -44,7 +75,7 @@ public class Tache {
                 ContraintesNames += ", ";
             }
         }
-        return "[" + nom + ", " + duree + "," + ContraintesNames + "]]";
+        return "[" + nom + ", " + duree + ", " + ContraintesNames + "]" + ", Rang= " + rang + "]";
     }
 
 }
