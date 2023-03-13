@@ -1,10 +1,14 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Tache {
     String nom;
     int duree;
     int rang = -1;
+    int dateTot = -1;
+    int dateTard = -1;
     ArrayList<Tache> contraintes;
+    ArrayList<Tache> successeurs = new ArrayList<Tache>();
 
     public Tache(String nom, int duree, ArrayList<Tache> contraintes) {
         this.nom = nom;
@@ -45,25 +49,65 @@ public class Tache {
         this.rang = rang;
     }
 
-    // permet d'utiliser SetRangs de la class TableauDeContrainte
-    public boolean setRang() {
-        if (rang != 0) {
-            if (contraintes.get(0).getRang() == -1) {
-                setRang(-1);
-                ;
-                return false;
-            } else {
-                setRang(contraintes.get(0).getRang() + 1);
+    public int getDateTot() {
+        return dateTot;
+    }
 
-                for (Tache tache : contraintes) {
-                    if (tache.getRang() > rang) {
-                        rang = tache.getRang() + 1;
-                    }
-                }
+    // permet de modifier le dateTot de la tache en parametre
+    public void setDateTot(int dateTot) {
+        this.dateTot = dateTot;
+    }
 
-            }
+    // permet de modifier le dateTot de la tache en parametre de manière récursive
+    public void setDateTot() {
+        if (dateTot == -1) {
+            dateTot = 0;
         }
-        return true;
+        for (Tache succ : successeurs) {
+            if (succ.dateTot == -1) {
+                succ.dateTot = dateTot + duree;
+            }
+            // si la dateTot du successeur est plus petite que la dateTot calculée, alors on
+            // remplace la valeur
+            else {
+                if (succ.dateTot < dateTot + duree) {
+                    succ.dateTot = dateTot + duree;
+                }
+            }
+            // on appelle la fonction récursive pour tous les successeurs
+            succ.setDateTot();
+        }
+
+    }
+
+    public int getDateTard() {
+        return dateTard;
+    }
+
+    // permet de modifier le dateTard de la tache en parametre
+    public void setDateTard(int dateTard) {
+        this.dateTard = dateTard;
+    }
+
+    // permet de modifier le dateTard de la tache en parametre de manière récursive
+    public void setDateTard() {
+        if (dateTard == -1) {
+            dateTard = dateTot;
+        }
+
+        for (Tache pred : contraintes) {
+            if (pred.dateTard == -1) {
+                pred.dateTard = dateTard - pred.duree;
+            } else {
+                // si la dateTard du prédécesseur est plus grande que la dateTard calculée,
+                // alors on remplace la valeur
+                if (pred.dateTard > dateTard - pred.duree) {
+                    pred.dateTard = dateTard - pred.duree;
+                }
+            }
+            // appel de la fonction récursive pour tous les prédécesseurs
+            pred.setDateTard();
+        }
     }
 
     @Override
@@ -75,7 +119,19 @@ public class Tache {
                 ContraintesNames += ", ";
             }
         }
-        return "[" + nom + ", " + duree + ", " + ContraintesNames + "]" + ", Rang= " + rang + "]";
+        ContraintesNames += "]";
+        String SuccesseursNames = "[";
+        for (Tache tache : successeurs) {
+            SuccesseursNames += tache.getNom();
+            if (successeurs.indexOf(tache) != successeurs.size() - 1) {
+                SuccesseursNames += ", ";
+            }
+        }
+        SuccesseursNames += "]";
+        return "[" + nom + ", " + duree + ", " + ContraintesNames + "," + SuccesseursNames + ", Rang= " + rang
+                + ", DateTot= "
+                + dateTot
+                + ", DateTard= " + dateTard + "]";
     }
 
 }

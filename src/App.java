@@ -46,27 +46,49 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 1; i < 12; i++) {
+        for (int i = 1; i < 14; i++) {
             int numFile = i;
-            String filepath = "C:/Users/arthu/OneDrive/Documents/VsCode/Projet_Graph_L3/src/Tables/Table" + numFile
+            String filepath = "./src/Tables/Table" + numFile
                     + ".txt";
             ;
             System.out.println(
-                    "***************************************************************************************************************************************\nDébut\n");
+                    "***************************************************************************************************************************************\nDébut\nTable "
+                            + numFile + "\n");
             int[][] tab = readTxtFile(filepath);
 
-            printTabInt(tab);
+            // printTabInt(tab);
             TableauDeContrainte tabC = new TableauDeContrainte(filepath);
+            System.out.println("\nDetection de circuit : \n");
+            tabC.DetectionCircuit("on");
+            if (!tabC.isCircuit) {
+                System.out.println("\nLe graphe est cyclique\n");
 
-            if (tabC.DetectionCircuit() || tabC.DetectionNegativité()) {
-                System.out.println("Ce n'est pas un graph d'ordonnancement");
-            } else {
-                System.out.println("Ce graph d'ordonnancement est valide");
+                System.out.println("\nRangs :\n ");
+                tabC.orderByRang();
+                // tabC.setDateTot();
+
+                System.out.println("\nSetDateTot :\n ");
+                tabC.setDatesTot();
+                tabC.PrintCalendrier("tot");
+                System.out.println("\nSetDateTard :\n ");
+                tabC.setDatesTard();
+                tabC.PrintCalendrier("tard");
+                ;
+
+                /*
+                 * 
+                 * 
+                 * System.out.println("setDateTard : ");
+                 * tabC.setDateTard();
+                 * System.out.println("PrintDateTot : ");
+                 * tabC.PrintCalendrier("tot");
+                 * tabC.orderByNom();
+                 * System.out.println(tabC);
+                 */
             }
 
-            // System.out.println(tabC.toString());
-            tabC.SetRangs();
-            System.out.println(tabC.toString());
+            System.out.println("\n" + tabC);
+
         }
 
     }
