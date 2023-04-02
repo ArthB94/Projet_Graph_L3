@@ -230,7 +230,8 @@ public class TableauDeContrainte {
 
     }
 
-    // en cour de dev
+    // Set les dates aux plus tard de manière récursive en partant de la dernièer
+    // tache et en metant a jour la date au plus tard de ses prédécesseurs
     public void setDatesTard() {
         if (isCircuit == true) {
             return;
@@ -274,7 +275,7 @@ public class TableauDeContrainte {
         orderBy = "rang";
     }
 
-    // permet d'ordonner les taches par nom
+    // permet d'ordonner les taches par nom de manière croissante
     public void orderByNom() {
         ArrayList<Tache> ordTaches = new ArrayList<Tache>();
         ArrayList<Tache> nonOrdTaches = new ArrayList<Tache>();
