@@ -9,6 +9,7 @@ public class Tache {
     int dateTard = -1;
     ArrayList<Tache> contraintes;
     ArrayList<Tache> successeurs = new ArrayList<Tache>();
+    boolean cheminCritiqueDislay = false;
 
     public Tache(String nom, int duree, ArrayList<Tache> contraintes) {
         this.nom = nom;

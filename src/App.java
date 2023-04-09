@@ -1,7 +1,6 @@
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -46,50 +45,80 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 1; i < 14; i++) {
-            int numFile = i;
-            String filepath = "./src/Tables/Table" + numFile
-                    + ".txt";
-            ;
-            System.out.println(
-                    "***************************************************************************************************************************************\nDébut\nTable "
-                            + numFile + "\n");
-            int[][] tab = readTxtFile(filepath);
+        Scanner sc = new Scanner(System.in);
+        int choix=0;
 
-            // printTabInt(tab);
-            TableauDeContrainte tabC = new TableauDeContrainte(filepath);
-            System.out.println("\nDetection de circuit : \n");
-            tabC.DetectionCircuit("on");
-            if (!tabC.isCircuit) {
-                System.out.println("\nLe graphe est cyclique\n");
+        do{
+            do{
+                System.out.println("Quitter --> saisissez 0\nSinon table à charger : ");
+                choix = sc.nextInt();
+            }while((choix > 13)||(choix < 0));
+            if((choix<=13)&&(choix>=1)){
 
-                System.out.println("\nRangs :\n ");
-                tabC.orderByRang();
-                // tabC.setDateTot();
-
-                System.out.println("\nSetDateTot :\n ");
-                tabC.setDatesTot();
-                tabC.PrintCalendrier("tot");
-                System.out.println("\nSetDateTard :\n ");
-                tabC.setDatesTard();
-                tabC.PrintCalendrier("tard");
+                int numFile = choix;
+                String filepath = "./src/Tables/Table" + numFile
+                        + ".txt";
                 ;
+                System.out.println(
+                        "----------------------------------------------------------------------------------------------------------------------------\n\nDébut\nTable "
+                                + numFile + "\n----------------------------------------------------------------------------------------------------------------------------");
+                int[][] tab = readTxtFile(filepath);
 
-                /*
-                 * 
-                 * 
-                 * System.out.println("setDateTard : ");
-                 * tabC.setDateTard();
-                 * System.out.println("PrintDateTot : ");
-                 * tabC.PrintCalendrier("tot");
-                 * tabC.orderByNom();
-                 * System.out.println(tabC);
-                 */
+                // printTabInt(tab);
+                TableauDeContrainte tabC = new TableauDeContrainte(filepath);
+
+                System.out.println("\nDetection de circuit : \n");
+                tabC.DetectionCircuit("on");
+                if (!tabC.isCircuit) {
+                    System.out.println("\nLe graphe est cyclique");
+                    System.out.println("\nRangs :");
+                    tabC.orderByRang();
+                    System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n");
+
+                    //Calendriers
+                    tabC.setDatesTot();
+                    tabC.PrintCalendrier("tot");
+                    System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n");
+                    tabC.setDatesTard();
+                    tabC.PrintCalendrier("tard");
+
+                    System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n");
+
+                    System.out.println("\n" + tabC);
+
+                    System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n");
+
+                    //Marges totales
+                    System.out.println(tabC.CalculMarge());
+                    System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n");
+                    
+                    //Chemin(s) critique(s)
+                    System.out.println(tabC.CheminCritique());
+                        
+                    
+                    
+                    // tabC.setDateTot();
+
+
+                    /*
+                    * 
+                    * 
+                    * System.out.println("setDateTard : ");
+                    * tabC.setDateTard();
+                    * System.out.println("PrintDateTot : ");
+                    * tabC.PrintCalendrier("tot");
+                    * tabC.orderByNom();
+                    * System.out.println(tabC);
+                    */
+                }
+                if(tabC.isCircuit)
+                System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n");
             }
-
-            System.out.println("\n" + tabC);
+            if(choix == 0)
+            System.out.println("\n----------------------------------------------------------------------------------------------------------------------------\n\n"
+            + "Fin de l'exécution du programme");
+            }while(choix != 0);
 
         }
 
     }
-}

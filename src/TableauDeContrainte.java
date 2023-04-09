@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TableauDeContrainte {
     // j'ai fait une liste de tache pour faire des parcour plus facilement mais ce
@@ -313,24 +312,25 @@ public class TableauDeContrainte {
         // Choix du type d'affichage
         if (affichage == "tot") {
             setDatesTot();
-            System.out.println("Rang\tTache\tPred\t\tDate\t");
+            System.out.println("Rang\tTache\tPred\t\t\tDate\t");
         }
         if (affichage == "tard") {
             setDatesTard();
-            System.out.println("Rang\tTache\tSucc\t\tDate\t");
+            System.out.println("Rang\tTache\tSucc\t\t\tDate\t");
         }
         // Creation des entétes
 
         // parcour des taches pour afficher les infos en ligne
         for (Tache t : taches) {
             String ligne = "";
+            int nbrValeurs = 0;
             ligne += t.rang + "\t";
             ligne += t.nom + "(" + t.duree + ")" + "\t";
             if (affichage == "tot") {
                 for (int i = 0; i < t.contraintes.size(); i++) {
                     ligne += t.contraintes.get(i).nom;
-
                     ligne += "." + t.contraintes.get(i).dateTot;
+                    nbrValeurs++;
 
                     if (i != t.contraintes.size() - 1) {
                         ligne += ",";
@@ -341,6 +341,7 @@ public class TableauDeContrainte {
                 for (int i = 0; i < t.successeurs.size(); i++) {
                     ligne += t.successeurs.get(i).nom;
                     ligne += "." + t.successeurs.get(i).dateTard;
+                    nbrValeurs++;
 
                     if (i != t.successeurs.size() - 1) {
                         ligne += ",";
@@ -348,7 +349,19 @@ public class TableauDeContrainte {
                 }
             }
 
-            ligne += "\t\t";
+            //FIXME:
+            int espace=0;    
+            if(nbrValeurs==0)
+                espace = 24;
+            if(nbrValeurs==1)
+                espace = 21;
+            if(nbrValeurs==2)
+                espace = 16;
+            if(nbrValeurs==3)
+                espace = 10 ;
+            for(int z=0; z<espace; z++)
+                ligne += " ";
+
             if (affichage == "tot") {
                 ligne += t.dateTot + "\t";
             }
@@ -426,6 +439,24 @@ public class TableauDeContrainte {
         return str;
     }
 
+    public String CalculMarge(){
+        String str = "Calcul marge totale\n";
+        for(Tache tache : taches){
+            str += tache.toString() + ", MargeTotal=" + Integer.toString(tache.dateTard-tache.dateTot) + "\n";
+        }
+        return str;
+    }
+
+    public String CheminCritique(){
+        String str1 = "Calcul chemin critique (marge totale = 0)\n";
+        for(Tache tache : taches){
+            if((tache.dateTot - tache.dateTard) == 0){
+                str1 += tache.toString() + ", MargeTotal=" + Integer.toString(tache.dateTard-tache.dateTot) + "\n";
+            }
+        }
+        return str1;
+    }
+
     @Override
     public String toString() {
         String str = "TableauDeContrainte\n";
@@ -434,9 +465,8 @@ public class TableauDeContrainte {
         for (Tache tache : taches) {
             str += tache.toString() + "\n";
         }
-        str += this.MatriceToString();
+        str += "\n" + this.MatriceToString() + "\n";
         return str;
-
     }
 
 }
